@@ -1,5 +1,4 @@
 
-
 /**
  * This is an example of a basic node.js script that performs
  * the Authorization Code oAuth2 flow to authenticate against
@@ -15,11 +14,11 @@ var cors = require('cors');
 var querystring = require('querystring');
 var cookieParser = require('cookie-parser');
 const { profileEnd } = require('console');
-var env = require('dotenv').config();
+require('dotenv').config();
 
-const client_id = process.env.CLIENT_ID; // Your client id
-const client_secret = process.env.CLIENT_SECRET; // Your secret
-var redirect_uri = 'http://localhost:8888/callback'; // Your redirect uri
+var client_id = process.env.CLIENT_ID; // Your client id
+var client_secret = process.env.CLIENT_SECRET; // Your secret
+var redirect_uri = process.env.REDIRECT_URI; // Your redirect uri
 
 /**
  * Generates a random string containing numbers and letters
@@ -43,6 +42,10 @@ var app = express();
 app.use(express.static(__dirname + '/public'))
    .use(cors())
    .use(cookieParser());
+
+app.get('/', (req, res) => {
+  res.send("hi")
+})
 
 app.get('/login', function(req, res) {
 
@@ -68,6 +71,7 @@ app.get('/callback', function(req, res) {
 
   var code = req.query.code || null;
   var state = req.query.state || null;
+  console.log(state)
   var storedState = req.cookies ? req.cookies[stateKey] : null;
 
   if (state === null || state !== storedState) {
@@ -147,12 +151,6 @@ app.get('/refresh_token', function(req, res) {
   });
 });
 
-http
-  .createServer(function(request, response) {
-    response.writeHead(200, { 'Content-Type': 'text/plain' });
-    response.write('Hello World');
-    response.end();
-  })
-  app.listen(8888, function() {
-    console.log("Server started on port 8888");
-  });
+app.listen(8888, ()=> {
+  console.log("listening to port 8888")
+})
