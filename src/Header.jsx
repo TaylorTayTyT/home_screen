@@ -1,15 +1,20 @@
 import "./Header.css"
-export default function Header() {
-    const buttonClick = () => {
-        console.log("hi")
-    }
-    return(
-        <div id = "title">
+import { Button, Input } from "@mui/material"
+//import queryString from 'query-string'
+
+function Header() {
+
+    return (
+        <div id="title">
             Spotify Diversity Test
-            <a href = "/login">
-            <button className="fetchData" onClick = {buttonClick}>
-            </button>
-            </a>
+            <div>
+                <Input id="client_id_field" type="text" placeholder="client_id">hi</Input>
+                <Input id="client_secret_field" type="text" placeholder="client_secret">hi</Input>
+                <Button type="submit" >Submit</Button>
+            </div>
+
         </div>
     )
 }
+
+export default Header

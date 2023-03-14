@@ -1,0 +1,5 @@
+const a = (div>
+    <Input id="client_id_field" type="text" placeholder="client_id">hi</Input>
+    <Input id="client_secret_field" type="text" placeholder="client_secret">hi</Input>
+    <Button type="submit" onClick={handleAuthorization}>Submit</Button>
+</div>);
