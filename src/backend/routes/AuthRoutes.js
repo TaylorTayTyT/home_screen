@@ -3,6 +3,8 @@
 const express = require('express');
 const router = express.Router();
 
+const fetch = require('node-fetch')
+
 const querystring = require('querystring');
 
 // this can be used as a seperate module
