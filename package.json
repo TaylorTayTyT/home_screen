@@ -2,9 +2,12 @@
   "name": "spotify-diversity-grader",
   "private": true,
   "version": "0.0.0",
+  "homepage": "https://taylortaytyt.github.io/spotify-diversity-grader/",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist",
     "preview": "vite preview"
   },
   "proxy": "http://localhost:8888/",
@@ -17,6 +20,7 @@
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
+    "gh-pages": "^5.0.0",
     "http": "^0.0.1-security",
     "http-proxy-middleware": "^2.0.6",
     "next": "^13.2.4",
