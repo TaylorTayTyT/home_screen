@@ -1,12 +1,7 @@
 import "./Header.css"
 import { Button, Input } from "@mui/material"
-import queryString from 'query-string'
-import { useEffect } from "react"
-import { Buffer } from "buffer"
 
 function Header() {
-
-
     const getHashParams = () => {
         const hashParams = {};
         let e,
@@ -20,9 +15,11 @@ function Header() {
         return hashParams;
     }
 
-    console.log(getHashParams().access_token)
+    /*
 
-    const accessToken = getHashParams().access_token;
+    console.log(getHashParams().code)
+
+    const accessToken = getHashParams().code;
 
     const url = 'https://api.spotify.com/v1/me/top/artists';
     const headers = {
@@ -38,6 +35,8 @@ function Header() {
             console.log(error)
         });
 
+        */
+
     return (
         <div id="title">
             Spotify Diversity Test
@@ -46,7 +45,6 @@ function Header() {
                     <Button type="button">Post request</Button>
                 </a>
             </div>
-
         </div>
     )
 }
