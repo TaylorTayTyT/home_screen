@@ -6,6 +6,14 @@ const router = express.Router();
 const fetch = require('node-fetch')
 
 const querystring = require('querystring');
+var SpotifyWebApi = require('spotify-web-api-node');
+
+// credentials are optional
+var spotifyApi = new SpotifyWebApi({
+  clientId: process.env.CLIENT_ID,
+  clientSecret: process.env.CLIENT_SECRET,
+  redirectUri: process.env.REDIRECTURI
+})
 
 // this can be used as a seperate module
 const encodeFormData = (data) => {
@@ -15,8 +23,36 @@ const encodeFormData = (data) => {
 }
 
 router.get('/', (req, res) => {
-  res.send("hey")
+
+  const code = req.query.code;
+  const body = {
+    grant_type: 'authorization_code',
+    code: code,
+    redirect_uri: process.env.REDIRECTURI,
+    client_id: process.env.CLIENT_ID,
+    client_secret: process.env.CLIENT_SECRET,
+  }
+
+  fetch('https://accounts.spotify.com/api/token', {
+    method: 'POST',
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+      "Accept": "application/json"
+    },
+    body: encodeFormData(body)
+  })
+  .then(response => response.json())
+  .then(data => {
+    const query = querystring.stringify(data);
+    res.redirect(`${process.env.CLIENT_REDIRECTURI}?${query}`);
+  });
+
+  
 })
+
+router.get('/wrapper', (req, res) => {
+  res.send("hi")
+});
 
 router.get('/login', async (req, res) => {
   const scope =
@@ -39,28 +75,7 @@ router.get('/login', async (req, res) => {
   );
 });
 
-router.get('/logged', async (req, res) => {
-  const body = {
-    grant_type: 'authorization_code',
-    code: req.query.code,
-    redirect_uri: process.env.REDIRECTURI,
-    client_id: process.env.CLIENT_ID,
-    client_secret: process.env.CLIENT_SECRET,
-  }
-
-  await fetch('https://accounts.spotify.com/api/token', {
-    method: 'POST',
-    headers: {
-      "Content-Type": "application/x-www-form-urlencoded",
-      "Accept": "application/json"
-    },
-    body: encodeFormData(body)
-  })
-  .then(response => response.json())
-  .then(data => {
-    const query = querystring.stringify(data);
-    res.redirect(`${process.env.CLIENT_REDIRECTURI}?${query}`);
-  });
-});
-
+router.get("/undefined", (req, res) => {
+  res.redirect("localhost:8888/api")
+})
 module.exports = router;
