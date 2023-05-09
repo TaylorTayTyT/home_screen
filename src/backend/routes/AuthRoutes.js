@@ -44,15 +44,11 @@ router.get('/', (req, res) => {
   .then(response => response.json())
   .then(data => {
     const query = querystring.stringify(data);
-    res.redirect(`${process.env.CLIENT_REDIRECTURI}?${query}`);
+    res.redirect("http://localhost:3000?" + query)
   });
 
   
 })
-
-router.get('/wrapper', (req, res) => {
-  res.send("hi")
-});
 
 router.get('/login', async (req, res) => {
   const scope =
@@ -76,6 +72,6 @@ router.get('/login', async (req, res) => {
 });
 
 router.get("/undefined", (req, res) => {
-  res.redirect("localhost:8888/api")
+  res.redirect("http://localhost:8888/api")
 })
 module.exports = router;

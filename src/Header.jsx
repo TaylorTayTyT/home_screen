@@ -2,41 +2,17 @@ import "./Header.css"
 import { Button, Input } from "@mui/material"
 
 function Header() {
-    const getHashParams = () => {
-        const hashParams = {};
-        let e,
-            r = /([^&;=]+)=?([^&;]*)/g,
-            q = window.location.search.substring(1);
 
-        while (e = r.exec(q)) {
-            hashParams[e[1]] = decodeURIComponent(e[2]);
-        }
+    async function getUser(token) {
 
-        return hashParams;
+        const urlParams = new URLSearchParams(document.location.search);
+        const access_token = urlParams.get("access_token");
+        console.log("access token is: " + urlParams.get("access_token"));
+        fetch("https://api.spotify.com/v1/me", {
+            method: "GET", headers: { Authorization: `Bearer ${access_token}` }
+        }).then((response) => response.json())
+            .then((data) => console.log(data))
     }
-
-    /*
-
-    console.log(getHashParams().code)
-
-    const accessToken = getHashParams().code;
-
-    const url = 'https://api.spotify.com/v1/me/top/artists';
-    const headers = {
-        Authorization: 'Bearer ' + accessToken
-    }
-
-    fetch(url, { headers })
-        .then(response => response.json())
-        .then(data => {
-            console.log(data)
-        })
-        .catch(error => {
-            console.log(error)
-        });
-
-        */
-
     return (
         <div id="title">
             Spotify Diversity Test
@@ -44,6 +20,7 @@ function Header() {
                 <a href="http://localhost:8888/api/login">
                     <Button type="button">Post request</Button>
                 </a>
+                <Button type="button" onClick={getUser}>get profile</Button>
             </div>
         </div>
     )
