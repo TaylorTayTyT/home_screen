@@ -44,7 +44,7 @@ router.get('/', (req, res) => {
   .then(response => response.json())
   .then(data => {
     const query = querystring.stringify(data);
-    res.redirect("http://localhost:3000?" + query)
+    res.redirect("http://localhost:8888/api/wrapper?" + query)
   });
 
   
@@ -73,5 +73,11 @@ router.get('/login', async (req, res) => {
 
 router.get("/undefined", (req, res) => {
   res.redirect("http://localhost:8888/api")
+})
+
+router.get("/wrapper", (req, res) => {
+  const access_token = req.params.access_token;
+  spotifyApi.setAccessToken(access_token);
+  res.send("authorization complete")
 })
 module.exports = router;
