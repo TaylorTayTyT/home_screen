@@ -6,6 +6,5 @@ import Header from './Header'
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <Header/>
-
   </React.StrictMode>
 )
