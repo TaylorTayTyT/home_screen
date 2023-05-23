@@ -25,13 +25,11 @@ function AuthorizationPage() {
 
     return (
         <div id="title">
-            Something here
+            Spotify Info
             <div>
                 <a href="http://localhost:8888/api/login">
                     <Button type="button">Post request</Button>
                 </a>
-                <Button type="button" onClick={getUser}>get profile</Button>
-                <Button type = "button" onClick = {getTopArtists}>get top artists</Button>
             </div>
             {name}
         </div>

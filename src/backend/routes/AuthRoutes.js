@@ -78,6 +78,6 @@ router.get("/undefined", (req, res) => {
 router.get("/wrapper", (req, res) => {
   const access_token = req.query.access_token;
   spotifyApi.setAccessToken(access_token);
-  res.redirect("http://localhost:3000?access_token=" + access_token)
+  res.redirect("http://localhost:3000/options/" + access_token)
 })
 module.exports = router;
