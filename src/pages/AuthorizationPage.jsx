@@ -1,9 +1,9 @@
 import { useState } from "react";
-import "./Header.css"
+import "./AuthorizationPage.css"
 import { Button, Input } from "@mui/material";
-import { getUserTest, SpotifyUser } from "./fetchInformation";
+import { getUserTest, SpotifyUser } from "../SpotifyClass/fetchInformation";
 
-function Header() {
+function AuthorizationPage() {
 
     const [name, SetName] = useState("");
 
@@ -16,32 +16,26 @@ function Header() {
             .then((data) => SetName(data.display_name))
     }
 
-    async function testGet() {
+    async function getTopArtists() {
         const urlParams = new URLSearchParams(document.location.search);
         const access_token = urlParams.get("access_token");
         let spot = new SpotifyUser(access_token)
-        await spot.init();
-        console.log(spot.data)
+        console.log(await spot.profile())
     }
-
-
-    
 
     return (
         <div id="title">
             Something here
-
-
             <div>
                 <a href="http://localhost:8888/api/login">
                     <Button type="button">Post request</Button>
                 </a>
                 <Button type="button" onClick={getUser}>get profile</Button>
-                <Button type = "button" onClick = {testGet}>Hi</Button>
+                <Button type = "button" onClick = {getTopArtists}>get top artists</Button>
             </div>
             {name}
         </div>
     )
 }
 
-export default Header
+export default AuthorizationPage

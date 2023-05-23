@@ -1,11 +1,10 @@
 class SpotifyUser {
     constructor(access_token) {
         this.access_token = access_token;
-        this.data = null; 
+        this.profileInformation = null; 
     }
 
-    async initialize(){
-        console.log("hi")
+    async profile(){
         const data = await fetch("https://api.spotify.com/v1/me", {
             method: "GET", headers: { Authorization: `Bearer ${this.access_token}` }
         }).then((response) => response.json())
@@ -13,16 +12,19 @@ class SpotifyUser {
         return data;
     }
 
-    async init() {
-        this.data = await this.initialize()
+    async getFavorites(genre){
+        return await fetch("https://api.spotify.com/v1/me/top/" + genre, {
+            method: "GET", headers: { Authorization: `Bearer ${this.access_token}` }
+        }).then((response) => response.json())
+            .then((data) => data);
     }
 
-    get member() {
-        return this.data;
+    get dName() {
+        return this.profileInformation;
     }
 
-    set member (data) {
-        this.data = data; 
+    set dName (data) {
+        this.data = data.profileInformation; 
     }
 }
 
