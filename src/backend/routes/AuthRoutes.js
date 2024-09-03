@@ -22,6 +22,13 @@ const encodeFormData = (data) => {
     .join('&');
 }
 
+/**
+ * just for testing
+ */
+router.get("/test", (req, res) =>{
+  res.send(process.env.CLIENT_ID);
+})
+
 router.get('/', (req, res) => {
 
   const code = req.query.code;
