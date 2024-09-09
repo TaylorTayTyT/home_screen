@@ -1,15 +1,24 @@
 import { useState } from "react";
-import "../Styles/AuthorizationPage.css"
-import { Button, Input } from "@mui/material";
-import { getUserTest, SpotifyUser } from "../SpotifyClass/fetchInformation";
+import "../Styles/AuthorizationPage.css";
+import "../Styles/TimeFont.css";
+import {SpotifyUser } from "../SpotifyClass/fetchInformation";
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import Form from 'react-bootstrap/Form';
+import BookRecs from "./BookRecs";
+import Gym from "./Gym";
+
+import Spotify from "./Spotify";
 
 function AuthorizationPage() {
-
+    
+    const [dateHour, SetDateHour] = useState(new Date().getHours());
+    const [dateMin, SetDateMin] = useState(new Date().getMinutes());
     const [name, SetName] = useState("");
+    setInterval(() => {
+        SetDateHour(new Date().getHours());
+        SetDateMin(new Date().getMinutes());
+    }, 1000
+    );
 
     async function getUser() {
         const urlParams = new URLSearchParams(document.location.search);
@@ -27,45 +36,23 @@ function AuthorizationPage() {
         console.log(await spot.profile())
     }
 
-    /**
-     * <a href="http://localhost:8800/api/login">
-                        <Button type="button">Post request</Button>
-                    </a>
-     */
-
     return (
         <div className="layout_container">
             {/*left_side*/}
             <Container>
-                <Row className="gadget">
-                    time
+                <Row id="time" className="gadget nanum-myeongjo-extrabold">
+                    {`${dateHour}:${dateMin}`}
                 </Row>
                 <Row className="gadget">
-                    goodreads
+                    <BookRecs/>
                 </Row>
                 <Row className="gadget">
-                    gym
+                    <Gym/>
                 </Row>
             </Container>
             {/*right_side*/}
-            <Container>
-                <Row className="">
-                    <Form.Group>
-                    <Form.Control type="string"/>
-                    </Form.Group>
-                    </Row>
-                    <Row>
-                    <Form.Text muted>
-                        Your password must be 8-20 characters long, contain letters and numbers,
-                        and must not contain spaces, special characters, or emoji.
-                    </Form.Text>
-                    </Row>
-                    <Row>
-                        <a href={import.meta.env.VITE_DBURI}>
-                            <Button type="button">Authenticate Spotify</Button>
-                        </a>
-                    </Row>
-                
+            <Container className="Spotify_container">
+                <Spotify />
             </Container>
         </div>
     )

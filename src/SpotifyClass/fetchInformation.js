@@ -1,4 +1,5 @@
 class SpotifyUser {
+
     constructor(access_token) {
         this.access_token = access_token;
         this.profileInformation = null; 

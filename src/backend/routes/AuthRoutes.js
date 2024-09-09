@@ -22,15 +22,8 @@ const encodeFormData = (data) => {
     .join('&');
 }
 
-/**
- * just for testing
- */
-router.get("/test", (req, res) =>{
-  res.send(process.env.CLIENT_ID);
-})
-
 router.get('/', (req, res) => {
-
+  console.log(req.query);
   const code = req.query.code;
   const body = {
     grant_type: 'authorization_code',

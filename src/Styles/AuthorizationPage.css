@@ -19,10 +19,22 @@ a{
 }
 .layout_container{
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: 60% 40%;
+    height: 100vh;
+
 }
 .gadget{
     display: flex;
     height: 17rem;
     justify-content: center;
+    align-items: center;
+}
+
+#time{
+    font-size: 8rem;
+}
+
+.Spotify_container{
+    padding: 1rem; 
+    border: solid 1px black;
 }
