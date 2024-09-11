@@ -5,7 +5,7 @@
   "homepage": "https://taylortaytyt.github.io/spotify-diversity-grader/",
   "scripts": {
     "dev": "vite",
-    "server": "node ./src/backend/server.js",
+    "server": "nodemon ./src/backend/server.js",
     "build": "vite build",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d dist",

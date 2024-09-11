@@ -43,6 +43,7 @@ router.get('/', (req, res) => {
   })
   .then(response => response.json())
   .then(data => {
+    console.log(data);
     const query = querystring.stringify(data);
     res.redirect("http://localhost:8888/api/wrapper?" + query)
   });
@@ -78,6 +79,22 @@ router.get("/undefined", (req, res) => {
 router.get("/wrapper", (req, res) => {
   const access_token = req.query.access_token;
   spotifyApi.setAccessToken(access_token);
-  res.redirect("http://localhost:3000/options/" + access_token)
+  res.redirect("http://localhost:3000/?access_token=" + access_token)
+});
+
+router.get("/profile", (req, res) => {
+  const access_token = req.query.access_token;
+  fetch("https://api.spotify.com/v1/me", {
+    method: "GET",
+    headers: {
+      "Authorization": access_token
+    }
+  })
+  .then(res => {
+    res.json(); 
+  })
+  .then(data =>{
+    res.redirect("http://localhost:3000/?"+ data.json().toString());
+  })
 })
 module.exports = router;
