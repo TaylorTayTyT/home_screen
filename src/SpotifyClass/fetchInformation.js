@@ -1,10 +1,37 @@
 //import { param } from "../backend/routes/AuthRoutes";
 
+
 class SpotifyUser {
 
     constructor(access_token) {
         this.access_token = access_token;
         this.profileInformation = null;
+    }
+
+    async retrieve_songs(songIDs){
+        
+        const songsPromise = new Promise((resolve, reject) =>{
+            let songs = []; 
+            songIDs.forEach(songID => {
+                fetch(`https://api.spotify.com/v1/tracks/${songID}`, {
+                    method: "GET",
+                    headers: {
+                        Authorization: `Bearer ${this.access_token}`
+                    }
+                })
+                .then(res => res.json())
+                .then(song => {
+                    songs.push(song);
+                })
+            });
+    
+            Promise.all(songs)
+            .then(results => resolve(songs))
+            .catch(err => reject(err))
+        });
+
+        return await songsPromise;
+
     }
 
     async generate_random_playlist(input) {
@@ -17,44 +44,50 @@ class SpotifyUser {
             }
         })
             .then(response => response.json())
-            .then(listOfPlaylists => {
-                let tracksPromisesArr = [];
-                listOfPlaylists.playlists.items.forEach(playlist => {
-                    let tracksPromises = fetch(`https://api.spotify.com/v1/playlists/${playlist.id}/tracks`, {
-                        method: "GET",
-                        headers: {
-                            Authorization: `Bearer ${this.access_token}`
-                        }
-                    });
-                    tracksPromisesArr.push(tracksPromises);
-                });
-                return Promise.allSettled(tracksPromisesArr)
-                .then(response => {
-                    let songIDs = new Set();
-                    response.forEach(item => {
-                        item.value.json()
-                        .then(data => {
-                            data.items.forEach(song => {
-                                songIDs.add(song.track.id);
-                            })
-                        })
-                    });
-                    console.log(songIDs);
-                })
-                /**
-                .then((values) =>{
-                    console.log(values)
-                    values.map(track => {
-                        let trackSongIDs = [];
-                        Array(track.items).forEach(trackItem =>{
-                            trackSongIDs.push(trackItem.track.id);
-                        });
-                        return trackSongIDs;
-                    })
-                }); */
-            })
-        return data;
+            .then(async listOfPlaylists => {
+                const playlistPromise = new Promise((resolve, reject) => {
+                    let tracksPromisesArr = [];
 
+                    listOfPlaylists.playlists.items.forEach(playlist => {
+                        // Push the fetch promise into tracksPromisesArr
+                        let trackPromise = fetch(`https://api.spotify.com/v1/playlists/${playlist.id}/tracks`, {
+                            method: "GET",
+                            headers: {
+                                Authorization: `Bearer ${this.access_token}`
+                            }
+                        }).then(response => response.json()); // Return the fetch promise
+
+                        tracksPromisesArr.push(trackPromise); // Push the promise into the array
+                    });
+
+                    // Use Promise.all to wait for all fetch promises to complete
+                    Promise.all(tracksPromisesArr)
+                        .then(results => resolve(results)) // Resolve with all the results
+                        .catch(error => reject(error)); // Reject if any fetch fails
+                });
+                const res = await playlistPromise;
+                let songIDs = new Set();
+                res.forEach((playlist) => {
+                    playlist.items.forEach((song) => songIDs.add(song.track.id));
+                });
+            
+                // Retrieve up to 50 unique song IDs
+                let playlistSongIDs = [];
+                let setIter = songIDs.values(); // Use .values() instead of .entries()
+                let currSong = setIter.next().value;
+                let counter = 0;
+            
+                while (counter < 50 && currSong) {
+                    playlistSongIDs.push(currSong);
+                    currSong = setIter.next().value;
+                    counter += 1;
+                }
+            
+                console.log(playlistSongIDs);
+                return playlistSongIDs;
+            })
+            .catch(e => console.log(e));
+        return this.retrieve_songs(data);
     }
 
     async profile() {
