@@ -4,6 +4,7 @@ import "../Styles/Spotify.css";
 import { Button } from "@mui/material";
 import { SpotifyUser } from '../SpotifyClass/fetchInformation';
 import { useState } from 'react';
+import Song from '../SpotifyClass/Song';
 
 export default function Spotify() {
     const url = new URL(window.location.href);
@@ -33,6 +34,7 @@ export default function Spotify() {
          * 5. Give the option to save the playlist
          */
         const input = document.getElementById('playist_generator_form').value;
+        if(!input) return alert("need an input")
         let info = await user.generate_random_playlist(input);
 
         console.log(info);
@@ -46,7 +48,7 @@ export default function Spotify() {
             </div>
             <Row>
                 <Form.Group className='spotifyInputContainer'>
-                    <Form.Control id='playist_generator_form' type="string"/>
+                    <Form.Control id='playist_generator_form' type="string" />
                 </Form.Group>
             </Row>
             <Row>

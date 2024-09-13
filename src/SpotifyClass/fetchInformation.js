@@ -1,5 +1,5 @@
 //import { param } from "../backend/routes/AuthRoutes";
-
+import Song from "./Song";
 
 class SpotifyUser {
 
@@ -9,7 +9,6 @@ class SpotifyUser {
     }
 
     async retrieve_songs(songIDs){
-        
         const songsPromise = new Promise((resolve, reject) =>{
             let songs = []; 
             songIDs.forEach(songID => {
@@ -21,16 +20,17 @@ class SpotifyUser {
                 })
                 .then(res => res.json())
                 .then(song => {
-                    songs.push(song);
+                    songs.push(new Song(song));
                 })
+                .catch(e => console.log(e))
             });
     
             Promise.all(songs)
             .then(results => resolve(songs))
             .catch(err => reject(err))
         });
-
-        return await songsPromise;
+        const songsArrJSON = await songsPromise;
+        return songsArrJSON;
 
     }
 
@@ -68,7 +68,9 @@ class SpotifyUser {
                 const res = await playlistPromise;
                 let songIDs = new Set();
                 res.forEach((playlist) => {
-                    playlist.items.forEach((song) => songIDs.add(song.track.id));
+                    playlist.items.forEach((song) => {
+                        if(song.track) songIDs.add(song.track.id)
+                    });
                 });
             
                 // Retrieve up to 50 unique song IDs
@@ -82,12 +84,12 @@ class SpotifyUser {
                     currSong = setIter.next().value;
                     counter += 1;
                 }
-            
-                console.log(playlistSongIDs);
                 return playlistSongIDs;
             })
             .catch(e => console.log(e));
-        return this.retrieve_songs(data);
+        if(data) return this.retrieve_songs(data);
+        return null; 
+        
     }
 
     async profile() {
