@@ -4,14 +4,14 @@ import "../Styles/Spotify.css";
 import { Button } from "@mui/material";
 import { SpotifyUser } from '../SpotifyClass/fetchInformation';
 import { useState } from 'react';
-import Song from '../SpotifyClass/Song';
+import SongEntry from '../../Components/SongEntry';
 
 export default function Spotify() {
     const url = new URL(window.location.href);
     const params = new URLSearchParams(url.search);
     const user = new SpotifyUser(params.get("access_token"));
-
-    const [request, SetRequest] = useState(null);
+    const [songs, SetSongs] = useState([]);
+    if(songs) console.log(songs.map(item=> item))
 
     const getProfileInfo = async () => {
         let info = await user.profile();
@@ -22,7 +22,6 @@ export default function Spotify() {
     const getFavorites = async () => {
         let info = await user.getFavorites();
         info.favorites = "favorites";
-        console.log(info);
     }
 
     const generatePlaylist = async () => {
@@ -36,12 +35,11 @@ export default function Spotify() {
         const input = document.getElementById('playist_generator_form').value;
         if(!input) return alert("need an input")
         let info = await user.generate_random_playlist(input);
-
-        console.log(info);
+        SetSongs(info);
     }
 
     return (
-        <>
+        <div className='spotifyContainer'>
             <div className="spotifyHeader">
                 <h1>How are you feeling?</h1>
                 <h2>Let's make a playlist for that!</h2>
@@ -61,6 +59,14 @@ export default function Spotify() {
                 <Button onClick={getFavorites}>Get Favorited Songs</Button>
                 <Button onClick={generatePlaylist}>Generate Playlist</Button>
             </Row>
-        </>
+            {songs.length > 0 ? songs.map(song => {
+                return(
+                    <>
+                    <SongEntry title={song._name} author = {song._artists} imageURL={song._album_img.url}/>
+                    </>
+                )
+                }) 
+            : "loading"}
+        </div>
     )
 }

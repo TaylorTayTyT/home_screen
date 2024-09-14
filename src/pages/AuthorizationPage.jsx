@@ -10,13 +10,14 @@ import Gym from "./Gym";
 import Spotify from "./Spotify";
 
 function AuthorizationPage() {
-    
-    const [dateHour, SetDateHour] = useState(new Date().getHours());
-    const [dateMin, SetDateMin] = useState(new Date().getMinutes());
+    const min = new Date().getMinutes().toString();
+    const [dateHour, SetDateHour] = useState(new Date().getHours().toString());
+    const [dateMin, SetDateMin] = useState(min > 9 ? min : `0${min}`);
     const [name, SetName] = useState("");
     setInterval(() => {
-        SetDateHour(new Date().getHours());
-        SetDateMin(new Date().getMinutes());
+        const min = new Date().getMinutes().toString();
+        SetDateHour(new Date().getHours().toString());
+        SetDateMin(min > 9 ? min : `0${min}`);
     }, 1000
     );
 

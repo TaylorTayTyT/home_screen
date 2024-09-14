@@ -6,3 +6,9 @@
 .spotifyInputContainer{
     text-align: center;
 }
+.spotifyContainer{
+    height: 100vh;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    transform: translateX(3.5%);
+}
