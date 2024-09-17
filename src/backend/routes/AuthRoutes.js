@@ -45,7 +45,7 @@ router.get('/', (req, res) => {
   .then(data => {
     console.log(data);
     const query = querystring.stringify(data);
-    res.redirect("http://localhost:8888/api/wrapper?" + query)
+    res.redirect("http://localhost:" + process.env.PORT + "/api/wrapper?" + query)
   });
 
   
@@ -73,7 +73,7 @@ router.get('/login', async (req, res) => {
 });
 
 router.get("/undefined", (req, res) => {
-  res.redirect("http://localhost:8888/api")
+  res.redirect("http://localhost:" + process.env.PORT + "/api")
 })
 
 router.get("/wrapper", (req, res) => {

@@ -3,7 +3,7 @@ import Form from 'react-bootstrap/Form';
 import "../Styles/Spotify.css";
 import { Button } from "@mui/material";
 import { SpotifyUser } from '../SpotifyClass/fetchInformation';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import SongEntry from '../../Components/SongEntry';
 
 export default function Spotify() {
@@ -11,17 +11,18 @@ export default function Spotify() {
     const params = new URLSearchParams(url.search);
     const user = new SpotifyUser(params.get("access_token"));
     const [songs, SetSongs] = useState([]);
-    if(songs) console.log(songs.map(item=> item))
+    const [clickedAnyOption, SetClickedAnyOption] = useState(false);
 
-    const getProfileInfo = async () => {
+    const getProfileInfo = async (button) => {
         let info = await user.profile();
         info.request_name = "profile";
-        console.log(info);
+        SetClickedAnyOption(true);
     };
     
     const getFavorites = async () => {
         let info = await user.getFavorites();
         info.favorites = "favorites";
+        SetClickedAnyOption(true);
     }
 
     const generatePlaylist = async () => {
@@ -33,10 +34,18 @@ export default function Spotify() {
          * 5. Give the option to save the playlist
          */
         const input = document.getElementById('playist_generator_form').value;
-        if(!input) return alert("need an input")
-        let info = await user.generate_random_playlist(input);
-        SetSongs(info);
-    }
+        if(!input) alert("You must have a sesarch input")
+        SetClickedAnyOption(true);
+        //let info = await user.generate_random_playlist(input);
+        user.generate_random_playlist(input)
+        .then(async info =>{
+            SetSongs(info);
+        });
+    };
+
+    useEffect(()=>{
+        console.log("rerender")
+    }, [songs]); 
 
     return (
         <div className='spotifyContainer'>
@@ -55,18 +64,18 @@ export default function Spotify() {
                 </a>
             </Row>
             <Row>
-                <Button onClick={getProfileInfo}>Get Profile</Button>
-                <Button onClick={getFavorites}>Get Favorited Songs</Button>
-                <Button onClick={generatePlaylist}>Generate Playlist</Button>
+                <Button className='action_button' onClick={getProfileInfo}>Get Profile</Button>
+                <Button className='action_button' onClick={getFavorites}>Get Favorited Songs</Button>
+                <Button id="generatePlaylist" className='action_button'onClick={generatePlaylist}>Generate Playlist</Button>
             </Row>
             {songs.length > 0 ? songs.map(song => {
                 return(
                     <>
-                    <SongEntry title={song._name} author = {song._artists} imageURL={song._album_img.url}/>
+                    <SongEntry key={song._id} title={song._name} author = {song._artists} imageURL={song._album_img.url}/>
                     </>
                 )
                 }) 
-            : "loading"}
+            : clickedAnyOption ? "loading_animation" : ""}
         </div>
     )
 }
