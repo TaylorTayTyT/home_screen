@@ -5,17 +5,22 @@ import { Button } from "@mui/material";
 import { SpotifyUser } from '../SpotifyClass/fetchInformation';
 import { useEffect, useState } from 'react';
 import SongEntry from '../../Components/SongEntry';
+import TabbedContent from './TabbedContent';
+import { Tab } from 'bootstrap';
 
 export default function Spotify() {
+    //possibly delete this bc of renduncacny in tabbed content
     const url = new URL(window.location.href);
     const params = new URLSearchParams(url.search);
     const user = new SpotifyUser(params.get("access_token"));
+
     const [songs, SetSongs] = useState([]);
     const [clickedAnyOption, SetClickedAnyOption] = useState(false);
 
-    const getProfileInfo = async (button) => {
+    const getProfileInfo = async () => {
         let info = await user.profile();
         info.request_name = "profile";
+        console.log(info)
         SetClickedAnyOption(true);
     };
     
@@ -58,15 +63,8 @@ export default function Spotify() {
                     <Form.Control id='playist_generator_form' type="string" />
                 </Form.Group>
             </Row>
-            <Row>
-                <a href={import.meta.env.VITE_DBURI}>
-                    <Button type="button">Authenticate Spotify</Button>
-                </a>
-            </Row>
-            <Row>
-                <Button className='action_button' onClick={getProfileInfo}>Get Profile</Button>
-                <Button className='action_button' onClick={getFavorites}>Get Favorited Songs</Button>
-                <Button id="generatePlaylist" className='action_button'onClick={generatePlaylist}>Generate Playlist</Button>
+            <Row className='tabbedContent'>
+                <TabbedContent/>
             </Row>
             {songs.length > 0 ? songs.map(song => {
                 return(

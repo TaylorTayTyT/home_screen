@@ -92,6 +92,16 @@ class SpotifyUser {
         
     }
 
+    async checkIfValid(){
+        return await this.profile()
+        .then(()=>{
+            return true; 
+        })
+        .catch((error)=>{
+            console.log(error)
+        })
+    }
+
     async profile() {
         const data = await fetch("https://api.spotify.com/v1/me", {
             method: "GET", headers: { Authorization: `Bearer ${this.access_token}` }
