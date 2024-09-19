@@ -106,7 +106,11 @@ class SpotifyUser {
         const data = await fetch("https://api.spotify.com/v1/me", {
             method: "GET", headers: { Authorization: `Bearer ${this.access_token}` }
         }).then((response) => response.json())
-            .then((data) => data);
+        .then((data) => data)
+        .catch(e => {
+            console.log(e);
+            return null; 
+        })
         return data;
     }
 

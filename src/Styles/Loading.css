@@ -1,0 +1,16 @@
+.image-container {
+    margin: auto;
+    width: fit-content;
+  }
+  
+  #loadingGif {
+    position: relative;
+  }
+  
+  .text-bottom {
+    position: relative;
+    text-align: center; /* Center the text */
+    color: black; /* Text color (adjust as needed) */
+    width: 100%;
+  }
+  
