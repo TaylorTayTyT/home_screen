@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import "../src/Styles/Profile.css";
+import ArtistArray from "./ArtistArray";
 
 export default function Profile(props) {
     const [profile, SetProfile] = useState();
@@ -11,30 +13,18 @@ export default function Profile(props) {
         props.user.topItems()
             .then(topItems => SetTopItems(topItems));
     }, [])
-
-    if(!(profile && topItems)) return; 
-    console.log(topItems)
+    if (!profile) return;
+    if (profile.error || !topItems) return;
     return (
-        <div>
-            {(<img src={profile.images[1].url}></img>)}
-            <h1>
-                {profile.display_name}
-            </h1>
-            {profile.uri}<br />
-            {profile.followers.total}
-
+        <div id="profileContainer">
+            {(<img className="backgroundImage" src={profile.images[1].url}></img>)}
             <div>
-                {topItems.items.map(item => {
-                    return (
-                        <div>
-                            <img src={item.images[2].url}></img>
-                            {item.name}
-                            {item.genres.join(", ")}
-                        </div>
-
-                    )
-                })}
+                <div className="profileTitle">
+                    <h1>hey, <span style={{ color: "#145709" }}>{profile.display_name}</span></h1>
+                    <h2>{'('}AKA ${profile.uri}{')'}</h2>
+                </div>
             </div>
+        <ArtistArray topItems = {topItems}/>
         </div>
     )
 }

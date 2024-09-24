@@ -1,6 +1,6 @@
 import { useState } from "react";
 import "../Styles/AuthorizationPage.css";
-import "../Styles/TimeFont.css";
+import "../Styles/Font.css";
 import {SpotifyUser } from "../SpotifyClass/fetchInformation";
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';

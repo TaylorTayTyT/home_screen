@@ -109,8 +109,9 @@ class SpotifyUser {
             method: "GET", headers: { Authorization: `Bearer ${this.access_token}` }
         }).then((response) => response.json())
             .then((data) => data)
-            .catch(e => {
+            .catch(e => { return null; 
             });
+        if(data.error) return null;
         return data;
     }
 
@@ -122,10 +123,14 @@ class SpotifyUser {
     }
 
     async topItems(){
-        return await fetch("https://api.spotify.com/v1/me/top/artists", {
+        const topItems = await fetch("https://api.spotify.com/v1/me/top/artists", {
             method: "GET", headers: { Authorization: `Bearer ${this.access_token}` }
         }).then((response) => response.json())
-        .then((data) => data);
+        .then((data) => data)
+        .catch(e => {return null;} 
+        );
+        if(topItems.error) return null; 
+        return topItems;
     }
 
     get dName() {
