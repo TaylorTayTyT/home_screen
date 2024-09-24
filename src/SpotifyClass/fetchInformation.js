@@ -8,9 +8,9 @@ class SpotifyUser {
         this.profileInformation = null;
     }
 
-    async retrieve_songs(songIDs){
-        const songsPromise = new Promise((resolve, reject) =>{
-            let songs = []; 
+    async retrieve_songs(songIDs) {
+        const songsPromise = new Promise((resolve, reject) => {
+            let songs = [];
             songIDs.forEach(songID => {
                 fetch(`https://api.spotify.com/v1/tracks/${songID}`, {
                     method: "GET",
@@ -18,16 +18,16 @@ class SpotifyUser {
                         Authorization: `Bearer ${this.access_token}`
                     }
                 })
-                .then(res => res.json())
-                .then(song => {
-                    songs.push(new Song(song));
-                })
-                .catch(e => console.log(e))
+                    .then(res => res.json())
+                    .then(song => {
+                        songs.push(new Song(song));
+                    })
+                    .catch(e => console.log(e))
             });
-    
+
             Promise.all(songs)
-            .then(results => resolve(songs))
-            .catch(err => reject(err))
+                .then(results => resolve(songs))
+                .catch(err => reject(err))
         });
         const songsArrJSON = await songsPromise;
         return songsArrJSON;
@@ -69,16 +69,16 @@ class SpotifyUser {
                 let songIDs = new Set();
                 res.forEach((playlist) => {
                     playlist.items.forEach((song) => {
-                        if(song.track) songIDs.add(song.track.id)
+                        if (song.track) songIDs.add(song.track.id)
                     });
                 });
-            
+
                 // Retrieve up to 50 unique song IDs
                 let playlistSongIDs = [];
                 let setIter = songIDs.values(); // Use .values() instead of .entries()
                 let currSong = setIter.next().value;
                 let counter = 0;
-            
+
                 while (counter < 50 && currSong) {
                     playlistSongIDs.push(currSong);
                     currSong = setIter.next().value;
@@ -87,16 +87,31 @@ class SpotifyUser {
                 return playlistSongIDs;
             })
             .catch(e => console.log(e));
-        if(data) return this.retrieve_songs(data);
-        return null; 
-        
+        if (data) return this.retrieve_songs(data);
+        return null;
+
+    }
+
+    async checkIfValid() {
+        return this.profile()
+            .then((data) => {
+                if(data.error) return false;
+                return true;
+            })
+            .catch((error) => {
+                return false;
+            })
     }
 
     async profile() {
+
         const data = await fetch("https://api.spotify.com/v1/me", {
             method: "GET", headers: { Authorization: `Bearer ${this.access_token}` }
         }).then((response) => response.json())
-            .then((data) => data);
+            .then((data) => data)
+            .catch(e => { return null; 
+            });
+        if(data.error) return null;
         return data;
     }
 
@@ -105,6 +120,17 @@ class SpotifyUser {
             method: "GET", headers: { Authorization: `Bearer ${this.access_token}` }
         }).then((response) => response.json())
             .then((data) => data);
+    }
+
+    async topItems(){
+        const topItems = await fetch("https://api.spotify.com/v1/me/top/artists", {
+            method: "GET", headers: { Authorization: `Bearer ${this.access_token}` }
+        }).then((response) => response.json())
+        .then((data) => data)
+        .catch(e => {return null;} 
+        );
+        if(topItems.error) return null; 
+        return topItems;
     }
 
     get dName() {

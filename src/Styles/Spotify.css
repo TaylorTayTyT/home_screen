@@ -10,5 +10,8 @@
     height: 100vh;
     overflow-y: scroll;
     overflow-x: hidden;
-    transform: translateX(3.5%);
+    scrollbar-width: thin;
+}
+.tabbedContent{
+    padding-top: 1rem;
 }

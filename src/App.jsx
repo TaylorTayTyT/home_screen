@@ -1,6 +1,5 @@
 import {Route, Routes} from "react-router-dom";
 import AuthorizationPage from "./pages/AuthorizationPage";
-import Profile from "./pages/Profile";
 import Options from "./pages/Options";
 import Test from "./pages/Test";
 import 'bootstrap/dist/css/bootstrap.min.css';

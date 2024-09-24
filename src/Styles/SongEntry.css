@@ -1,7 +1,7 @@
 .albumPicContainer{
     align-content: center;
     object-fit: cover;
-    max-height: 4rem;
+    max-height: 6rem;
 }
 .albumPic{
     max-height: 100%;
