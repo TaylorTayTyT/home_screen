@@ -12,12 +12,13 @@ export default function ArtistArray(props) {
         document.querySelectorAll(".artistItem").forEach(artistItem => {
             artistItem.onclick = artistPopup;
         })
-    })
+    });
     return (
         <>
         <p className="artistArrayLabel nanum-myeongjo-regular"><b>Your favorite artists</b></p>
+        {popup ? <div className="overlay"></div> : ""}
         <div id="artistArrayContainer">
-            <ArtistPopup popup = {popup} SetPopup = {SetPopup}/>
+            <ArtistPopup user = {props.user} popup = {popup} SetPopup = {SetPopup}/>
             {props.topItems.items.map((item, index) => {
                 return (
                     <div className="artistItem koulen-regular">

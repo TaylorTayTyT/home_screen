@@ -9,7 +9,6 @@ export default function Spotify() {
     const url = new URL(window.location.href);
     const params = new URLSearchParams(url.search);
     const user = new SpotifyUser(params.get("access_token"));
-    console.log(user)
 
     return (
         <div className='spotifyContainer'>

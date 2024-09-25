@@ -131,6 +131,17 @@ class SpotifyUser {
         );
         if(topItems.error) return null; 
         return topItems;
+    };
+
+    async getArtistTopTracks(artist){
+        const topItems = await fetch("https://api.spotify.com/v1/artists/" + artist + "/top-tracks", {
+            method: "GET", headers: { Authorization: `Bearer ${this.access_token}` }
+        }).then((response) => response.json())
+        .then((data) => data)
+        .catch(e => {console.log(e); return null;} 
+        );
+        if(topItems.error) return null; 
+        return topItems;
     }
 
     get dName() {

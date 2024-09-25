@@ -24,7 +24,7 @@ export default function Profile(props) {
                     <h2>{'('}AKA ${profile.uri}{')'}</h2>
                 </div>
             </div>
-        <ArtistArray topItems = {topItems}/>
+        <ArtistArray user = {props.user} topItems = {topItems}/>
         </div>
     )
 }
