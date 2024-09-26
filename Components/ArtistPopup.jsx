@@ -5,7 +5,13 @@ import { CloseButton } from "react-bootstrap";
 
 export default function ArtistPopup(props) {
     const [topTracks, SetTopTracks] = useState([]);
-    const [relatedArtists, SetRelatedArtists] = useState(); 
+    const [relatedArtists, SetRelatedArtists] = useState([]); 
+    const trackLink = (track) => {
+        window.open(track.uri);
+    };
+    const artistLink = (artist) => {
+        window.open(artist.uri);
+    }
     const closePopup = () => {
         SetTopTracks([]);
         props.SetPopup(null);
@@ -15,7 +21,11 @@ export default function ArtistPopup(props) {
         props.user.getArtistTopTracks(props.popup.id)
         .then(data=>{
             SetTopTracks(data);
-        })
+        });
+        props.user.getArtistRelatedArtists(props.popup.id)
+        .then(data=>{
+            SetRelatedArtists(data);
+        });
     }, [props.popup]);
 
     if(!props.popup) return; 
@@ -32,10 +42,8 @@ export default function ArtistPopup(props) {
                 <div className="topTracks">
                     {topTracks.tracks ? topTracks.tracks.map((track, idx) =>{
                         if(idx < 4) {
-                            console.log(`url(${track.album.images[0].url})`)
-                            console.log(track.album.images)
                             return(
-                                <div className="track" style={{backgroundImage: track.album.images ? `url(${track.album.images[2].url})` : null}}> 
+                                <div onClick={()=> trackLink(track)} className="track" style={{backgroundImage: track.album.images ? `url(${track.album.images[2].url})` : null}}> 
                                     {track.name}
                                 </div>
                             )
@@ -46,6 +54,17 @@ export default function ArtistPopup(props) {
 
             <div className="popupHeader koulen-regular">
                 Related Artists
+                <div className="topTracks"> 
+                    {relatedArtists.artists ? relatedArtists.artists.map((artist, idx) =>{
+                        if(idx < 4){
+                            return(
+                                <div onClick={()=>artistLink(artist)} className="track" style={{backgroundImage: artist.images ? `url(${artist.images[2].url})` : null}}>
+                                    {artist.name}
+                                </div>
+                            )
+                        }
+                    }) : ""}
+                </div>
             </div>
         </div>
     )

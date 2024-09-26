@@ -1,13 +1,14 @@
 .popupContainer{
     position: absolute;
     background-color: white;
-    width: 25rem;
+    width: 30rem;
     aspect-ratio: 1 / 1;
     top: 20%;
     left: 60%;
     z-index: 100;
     box-shadow: black 1rem 1rem;
     padding-left: 1rem;
+    overflow-y: scroll;
 }
 
 .topTracks{
@@ -18,6 +19,8 @@
     justify-content: space-between;
     text-align: center;
     align-items: center;
+    background-color: rgba(0, 0, 0, 0.05);
+    padding: 1rem;
 }
 
 .popupHeader{
@@ -31,10 +34,16 @@
     justify-content: center;
     font-size: 1rem;
     object-fit: contain;
-    width: 70px;
+    max-width: 5rem;
     aspect-ratio: 1 / 1;
     color: white;
     text-align: center;
+    text-shadow: 0.1rem .1rem black;
+    cursor: pointer;
+    padding: 1rem;
+    overflow: hidden;
+    font-size: 0.75rem;
+    
 }
 
 .closeButton{

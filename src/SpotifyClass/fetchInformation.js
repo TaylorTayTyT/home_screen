@@ -144,6 +144,17 @@ class SpotifyUser {
         return topItems;
     }
 
+    async getArtistRelatedArtists(artist){
+        const topItems = await fetch("https://api.spotify.com/v1/artists/" + artist + "/related-artists", {
+            method: "GET", headers: { Authorization: `Bearer ${this.access_token}` }
+        }).then((response) => response.json())
+        .then((data) => data)
+        .catch(e => {console.log(e); return null;} 
+        );
+        if(topItems.error) return null; 
+        return topItems;
+    }
+
     get dName() {
         return this.profileInformation;
     }
