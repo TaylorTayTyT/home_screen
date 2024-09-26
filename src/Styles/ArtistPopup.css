@@ -20,7 +20,6 @@
     text-align: center;
     align-items: center;
     background-color: rgba(0, 0, 0, 0.05);
-    padding: 1rem;
 }
 
 .popupHeader{
@@ -56,3 +55,7 @@
     padding: 1rem;
     line-height: 2rem;
 };
+
+.carousel-indicators{
+    margin-bottom: 0 !important;
+}
