@@ -27,14 +27,14 @@ export default function ArtistPopup(props) {
             .then(data => {
                 SetRelatedArtists(data);
             });
-        document.querySelectorAll(".carousel-indicators").forEach(item=>{
-            item.style.marginBottom = 0; 
+        document.querySelectorAll(".carousel-indicators").forEach(item => {
+            item.style.marginBottom = 0;
         });
-        document.querySelectorAll("carousel-control-prev").forEach(item=>{
-            item.style.opacity = 1; 
+        document.querySelectorAll("carousel-control-prev").forEach(item => {
+            item.style.opacity = 1;
         });
-        document.querySelectorAll("carousel-control-next").forEach(item=>{
-            item.style.opacity = 1; 
+        document.querySelectorAll("carousel-control-next").forEach(item => {
+            item.style.opacity = 1;
         });
     }, [props.popup]);
 
@@ -51,21 +51,25 @@ export default function ArtistPopup(props) {
                 Top Tracks
                 <Carousel controls={true} variant="dark">
                     <Carousel.Item>
-                            <div className="topTracks">
-                                {topTracks.tracks ? topTracks.tracks.map((track, idx) => {
-                                    if (idx < 4) {
-                                        return (
-                                            <div onClick={() => trackLink(track)} className="track" style={{ backgroundImage: track.album.images ? `url(${track.album.images[2].url})` : null }}>
-                                                {track.name}
-                                            </div>
-                                        )
-                                    }
-                                }) : ""}
-                            </div>
+                        <div className="topTracks">
+                            {topTracks.tracks ? topTracks.tracks.slice(0, 4).map((track) => {
+                                return (
+                                    <div onClick={() => trackLink(track)} className="track" style={{ backgroundImage: track.album.images ? `url(${track.album.images[2].url})` : null }}>
+                                        {track.name}
+                                    </div>
+                                )
+                            }) : ""}
+                        </div>
                     </Carousel.Item>
                     <Carousel.Item>
-                        <div>
-                            hi
+                        <div className="topTracks">
+                            {topTracks.tracks ? topTracks.tracks.slice(4, 8).map((track) => {
+                                return (
+                                    <div onClick={() => trackLink(track)} className="track" style={{ backgroundImage: track.album.images ? `url(${track.album.images[2].url})` : null }}>
+                                        {track.name}
+                                    </div>
+                                )
+                            }) : ""}
                         </div>
                     </Carousel.Item>
                 </Carousel>
@@ -73,17 +77,30 @@ export default function ArtistPopup(props) {
 
             <div className="popupHeader koulen-regular">
                 Related Artists
-                <div className="topTracks">
-                    {relatedArtists.artists ? relatedArtists.artists.map((artist, idx) => {
-                        if (idx < 4) {
-                            return (
-                                <div onClick={() => artistLink(artist)} className="track" style={{ backgroundImage: artist.images ? `url(${artist.images[2].url})` : null }}>
-                                    {artist.name}
-                                </div>
-                            )
-                        }
-                    }) : ""}
-                </div>
+                <Carousel controls={true} variant="dark">
+                    <Carousel.Item>
+                        <div className="topTracks">
+                            {relatedArtists.artists ? relatedArtists.artists.slice(0, 4).map((artist, idx) => {
+                                return (
+                                    <div onClick={() => artistLink(artist)} className="track" style={{ backgroundImage: artist.images ? `url(${artist.images[2].url})` : null }}>
+                                        {artist.name}
+                                    </div>
+                                )
+                            }) : ""}
+                        </div>
+                    </Carousel.Item>
+                    <Carousel.Item>
+                        <div className="topTracks">
+                            {relatedArtists.artists ? relatedArtists.artists.slice(4, 8).map((artist) => {
+                                return (
+                                    <div onClick={() => artistLink(artist)} className="track" style={{ backgroundImage: artist.images ? `url(${artist.images[2].url})` : null }}>
+                                        {artist.name}
+                                    </div>
+                                )
+                            }) : ""}
+                        </div>
+                    </Carousel.Item>
+                </Carousel>
             </div>
         </div>
     )
