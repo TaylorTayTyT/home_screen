@@ -45,7 +45,7 @@ router.get('/', (req, res) => {
   .then(data => {
     console.log(data);
     const query = querystring.stringify(data);
-    res.redirect("http://localhost:" + process.env.PORT + "/api/wrapper?" + query)
+    res.redirect(process.env.BASEURL + "/api/wrapper?" + query)
   });
 
   
@@ -73,13 +73,13 @@ router.get('/login', async (req, res) => {
 });
 
 router.get("/undefined", (req, res) => {
-  res.redirect("http://localhost:" + process.env.PORT + "/api")
+  res.redirect(process.env.BASEURL + "/api")
 })
 
 router.get("/wrapper", (req, res) => {
   const access_token = req.query.access_token;
   spotifyApi.setAccessToken(access_token);
-  res.redirect("http://localhost:3000/?access_token=" + access_token)
+  res.redirect(process.env.BASEURL + "/?access_token=" + access_token)
 });
 
 router.get("/profile", (req, res) => {
@@ -94,7 +94,7 @@ router.get("/profile", (req, res) => {
     res.json(); 
   })
   .then(data =>{
-    res.redirect("http://localhost:3000/?"+ data.json().toString());
+    res.redirect(process.env.BASEURL + "/?"+ data.json().toString());
   })
 })
 module.exports = router;
