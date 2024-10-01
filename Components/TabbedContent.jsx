@@ -50,9 +50,6 @@ export default function TabbedContent(props) {
             <Tab className='actionTab' eventKey="profile" title="Profile" disabled={!authenticated}>
                 <Profile user={props.user} />
             </Tab>
-            <Tab className='actionTab' eventKey="contact" title="Contact" disabled={!authenticated}>
-                Tab content for Contact
-            </Tab>
         </Tabs>
     );
 }

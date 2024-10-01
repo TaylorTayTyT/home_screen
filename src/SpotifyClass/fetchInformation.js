@@ -6,6 +6,7 @@ class SpotifyUser {
     constructor(access_token) {
         this.access_token = access_token;
         this.profileInformation = null;
+        this._id = null;
     }
 
     async retrieve_songs(songIDs) {
@@ -95,7 +96,7 @@ class SpotifyUser {
     async checkIfValid() {
         return this.profile()
             .then((data) => {
-                if(data.error) return false;
+                if (data.error) return false;
                 return true;
             })
             .catch((error) => {
@@ -109,9 +110,11 @@ class SpotifyUser {
             method: "GET", headers: { Authorization: `Bearer ${this.access_token}` }
         }).then((response) => response.json())
             .then((data) => data)
-            .catch(e => { return null; 
+            .catch(e => {
+                return null;
             });
-        if(data.error) return null;
+        if (data.error) return null;
+        this._id = data.id; 
         return data;
     }
 
@@ -122,37 +125,67 @@ class SpotifyUser {
             .then((data) => data);
     }
 
-    async topItems(){
+    async topItems() {
         const topItems = await fetch("https://api.spotify.com/v1/me/top/artists", {
             method: "GET", headers: { Authorization: `Bearer ${this.access_token}` }
         }).then((response) => response.json())
-        .then((data) => data)
-        .catch(e => {return null;} 
-        );
-        if(topItems.error) return null; 
+            .then((data) => data)
+            .catch(e => { return null; }
+            );
+        if (topItems.error) return null;
         return topItems;
     };
 
-    async getArtistTopTracks(artist){
+    async getArtistTopTracks(artist) {
         const topItems = await fetch("https://api.spotify.com/v1/artists/" + artist + "/top-tracks", {
             method: "GET", headers: { Authorization: `Bearer ${this.access_token}` }
         }).then((response) => response.json())
-        .then((data) => data)
-        .catch(e => {console.log(e); return null;} 
-        );
-        if(topItems.error) return null; 
+            .then((data) => data)
+            .catch(e => { console.log(e); return null; }
+            );
+        if (topItems.error) return null;
         return topItems;
     }
 
-    async getArtistRelatedArtists(artist){
+    async getArtistRelatedArtists(artist) {
         const topItems = await fetch("https://api.spotify.com/v1/artists/" + artist + "/related-artists", {
             method: "GET", headers: { Authorization: `Bearer ${this.access_token}` }
         }).then((response) => response.json())
-        .then((data) => data)
-        .catch(e => {console.log(e); return null;} 
-        );
-        if(topItems.error) return null; 
+            .then((data) => data)
+            .catch(e => { console.log(e); return null; }
+            );
+        if (topItems.error) return null;
         return topItems;
+    }
+
+    async addToPlaylists(playlist, inputName) {
+        const profId = await this.profile()
+            .then(data =>
+                data["id"]
+            );
+        
+        const playlistIDBody = {
+            "name": inputName, 
+            "public": true,
+            "collaborative": false,
+            "description": inputName
+        }
+        const playlistId = await fetch("https://api.spotify.com/v1/users/" + profId + "/playlists", {
+            method: "POST", headers: { Authorization: `Bearer ${this.access_token}`, body: playlistIDBody }
+        })
+            .then(response => response.json())
+            .then(data => data["id"]);
+
+        const addPlaylistBody = {
+            "playlist_id": playlistId,
+            "position": 0,
+            "uris": playlist
+        }
+        return await fetch("https://api.spotify.com/v1/playlists/" + playlistId + "/tracks", {
+            method: "POST", headers: {Authorization: `Bearer ${this.access_token}`}, body: addPlaylistBody})
+        .then(response => response.json())
+        .then(data => data)
+        .catch(error => console.log(error))
     }
 
     get dName() {
@@ -161,6 +194,9 @@ class SpotifyUser {
 
     set dName(data) {
         this.data = data.profileInformation;
+    }
+    set id(id){
+        this._id = id; 
     }
 }
 

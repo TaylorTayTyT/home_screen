@@ -14,10 +14,11 @@ application.use(cors({
 const AuthRoutes = require('./routes/AuthRoutes.js');
 application.use('/api', cors(), AuthRoutes);
 
+/** 
 application.use("/", cors(), express.static("dist"), (req, res)=>{
   console.log(path.join(__dirname, "dist"));
   res.sendFile(path.join(__dirname, "dist", "index.html"))
-})
+})*/
 
 
 application.listen(PORT, () => {

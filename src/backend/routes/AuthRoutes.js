@@ -23,7 +23,7 @@ const encodeFormData = (data) => {
 }
 
 router.get('/', (req, res) => {
-  console.log(req.query);
+  const scope = "playlist-modify-public playlist-modify-private"
   const code = req.query.code;
   const body = {
     grant_type: 'authorization_code',
@@ -31,6 +31,7 @@ router.get('/', (req, res) => {
     redirect_uri: process.env.REDIRECTURI,
     client_id: process.env.CLIENT_ID,
     client_secret: process.env.CLIENT_SECRET,
+    scope: scope
   }
 
   fetch('https://accounts.spotify.com/api/token', {
@@ -41,14 +42,11 @@ router.get('/', (req, res) => {
     },
     body: encodeFormData(body)
   })
-  .then(response => response.json())
-  .then(data => {
-    console.log(data);
-    const query = querystring.stringify(data);
-    res.redirect(process.env.BASEURL + "/api/wrapper?" + query)
-  });
-
-  
+    .then(response => response.json())
+    .then(data => {
+      const query = querystring.stringify(data);
+      res.redirect(process.env.BASEURL + "?" + query)
+    });
 })
 
 router.get('/login', async (req, res) => {
@@ -90,11 +88,55 @@ router.get("/profile", (req, res) => {
       "Authorization": access_token
     }
   })
-  .then(res => {
-    res.json(); 
+    .then(res => {
+      res.json();
+    })
+    .then(data => {
+      res.redirect(process.env.BASEURL + "/?" + data.json().toString());
+    })
+})
+
+router.get("/addPlaylist", async (req, res) => {
+  const searchParams = new URLSearchParams(req.query);
+  let playlists = req.query.playlist;
+  const input = req.query.input;
+  const id = req.query.id;
+  const access_token = req.query.access_token;
+
+  playlists = playlists.split(",");
+
+  const playlistIDBody = {
+    "name": input,
+    "public": true,
+    "collaborative": false,
+    "description": input
+  }
+
+  const playlistId = await fetch("https://api.spotify.com/v1/users/" + id + "/playlists", {
+    method: "POST", headers: { Authorization: `Bearer ${access_token}`}, body: JSON.stringify(playlistIDBody)
   })
-  .then(data =>{
-    res.redirect(process.env.BASEURL + "/?"+ data.json().toString());
+    .then(response => response.json())
+    .then(data => {console.log(data);return data["id"]})
+    .catch(error => console.log(error))
+  console.log(playlistId)
+  const addPlaylistBody = {
+    "playlist_id": playlistId,
+    "position": 0,
+    "uris": playlists
+  }
+
+  const result = await fetch("https://api.spotify.com/v1/playlists/" + playlistId + "/tracks", {
+    method: "POST", headers: { Authorization: `Bearer ${access_token}` }, body: JSON.stringify(addPlaylistBody)
   })
+    .then(response => response.json())
+    .then(data => data)
+    .catch(error => console.log(error));
+
+  console.log(result)
+  
+  res.redirect(process.env.BASEURL + "?" + "access_token="+access_token);
+  //im trying to be able to add tracks to a new playlist
+  //current problem is saving user info
+
 })
 module.exports = router;
