@@ -7,12 +7,13 @@ const fetch = require('node-fetch')
 
 const querystring = require('querystring');
 var SpotifyWebApi = require('spotify-web-api-node');
+const REDIRECTURI = process.env.BASEURL + "/api/"
 
 // credentials are optional
 var spotifyApi = new SpotifyWebApi({
   clientId: process.env.CLIENT_ID,
   clientSecret: process.env.CLIENT_SECRET,
-  redirectUri: process.env.REDIRECTURI
+  redirectUri: REDIRECTURI
 })
 
 // this can be used as a seperate module
@@ -28,7 +29,7 @@ router.get('/', (req, res) => {
   const body = {
     grant_type: 'authorization_code',
     code: code,
-    redirect_uri: process.env.REDIRECTURI,
+    redirect_uri: REDIRECTURI,
     client_id: process.env.CLIENT_ID,
     client_secret: process.env.CLIENT_SECRET,
     scope: scope
@@ -65,7 +66,7 @@ router.get('/login', async (req, res) => {
       response_type: 'code',
       client_id: process.env.CLIENT_ID,
       scope: scope,
-      redirect_uri: process.env.REDIRECTURI
+      redirect_uri: REDIRECTURI
     })
   );
 });
