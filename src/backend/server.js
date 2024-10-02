@@ -19,9 +19,12 @@ application.use("/", cors(), express.static("dist"), (req, res)=>{
 })
   */
 // Serve static files from the "dist" directory
-application.use(express.static(path.join(__dirname, '..', '..', 'dist')))
 
 application.use('/api', cors(), AuthRoutes);
+
+application.use("/", cors(), (req, res)=>{
+  res.send("server")
+})
 
 application.listen(PORT, () => {
   console.log(`Server started on port ${PORT}`);
