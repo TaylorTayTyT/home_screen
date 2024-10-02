@@ -105,12 +105,19 @@ router.get("/addPlaylist", async (req, res) => {
 
   playlists = playlists.split(",");
 
+  if(!id) {
+    res.redirect(process.env.BASEURL + "?" + "access_token="+access_token);
+    return;
+  }
+
+
   const playlistIDBody = {
     "name": input,
     "public": true,
     "collaborative": false,
     "description": input
   }
+  console.log(playlistIDBody)
 
   const playlistId = await fetch("https://api.spotify.com/v1/users/" + id + "/playlists", {
     method: "POST", headers: { Authorization: `Bearer ${access_token}`}, body: JSON.stringify(playlistIDBody)
@@ -119,6 +126,7 @@ router.get("/addPlaylist", async (req, res) => {
     .then(data => {console.log(data);return data["id"]})
     .catch(error => console.log(error))
   console.log(playlistId)
+  
   const addPlaylistBody = {
     "playlist_id": playlistId,
     "position": 0,
@@ -133,8 +141,12 @@ router.get("/addPlaylist", async (req, res) => {
     .catch(error => console.log(error));
 
   console.log(result)
+
+  const queryItems = new URLSearchParams(); 
+  queryItems.append("access_token", access_token);
+  queryItems.append("playlist", playlistId);
   
-  res.redirect(process.env.BASEURL + "?" + "access_token="+access_token);
+  res.redirect(process.env.BASEURL + "?" + queryItems.toString());
   //im trying to be able to add tracks to a new playlist
   //current problem is saving user info
 

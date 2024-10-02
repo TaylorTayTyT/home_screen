@@ -5,6 +5,7 @@ import { Button } from "@mui/material";
 import SpotifyInput from './SpotifyInput';
 import Profile from './Profile';
 import { Form } from 'react-bootstrap';
+import "../src/Styles/Font.css";
 export default function TabbedContent(props) {
     const [authenticated, SetAuthenticated] = useState(false);
     const [profile, SetProfile] = useState();
@@ -35,7 +36,7 @@ export default function TabbedContent(props) {
         <Tabs
             defaultActiveKey="authenticate"
             id="uncontrolled-tab-example"
-            className="mb-3"
+            className="mb-3 nanum-myeongjo-regular"
         >
             <Tab eventKey="Authenticate" title="Authenticate">
                 <a href={import.meta.env.VITE_DBURI}>

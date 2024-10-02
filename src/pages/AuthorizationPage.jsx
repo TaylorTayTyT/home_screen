@@ -20,23 +20,6 @@ function AuthorizationPage() {
         SetDateMin(min > 9 ? min : `0${min}`);
     }, 1000
     );
-
-    async function getUser() {
-        const urlParams = new URLSearchParams(document.location.search);
-        const access_token = urlParams.get("access_token");
-        fetch("https://api.spotify.com/v1/me", {
-            method: "GET", headers: { Authorization: `Bearer ${access_token}` }
-        }).then((response) => response.json())
-            .then((data) => SetName(data.display_name))
-    }
-
-    async function getTopArtists() {
-        const urlParams = new URLSearchParams(document.location.search);
-        const access_token = urlParams.get("access_token");
-        let spot = new SpotifyUser(access_token)
-        console.log(await spot.profile())
-    }
-
     return (
         <div className="layout_container">
             {/*left_side*/}

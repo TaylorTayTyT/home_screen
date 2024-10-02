@@ -1,8 +1,7 @@
 import Row from 'react-bootstrap/Row';
 import "../Styles/Spotify.css";
 import { SpotifyUser } from '../SpotifyClass/fetchInformation';
-import { useEffect, useState } from 'react';
-import SongEntry from '../../Components/SongEntry';
+import "../Styles/Font.css";
 import TabbedContent from '../../Components/TabbedContent';
 export default function Spotify() {
     //possibly delete this bc of renduncacny in tabbed content
@@ -12,7 +11,7 @@ export default function Spotify() {
 
     return (
         <div className='spotifyContainer'>
-            <div className="spotifyHeader">
+            <div className="spotifyHeader koulen-regular">
                 <h1>How are you feeling?</h1>
                 <h2>Let's make a playlist for that!</h2>
             </div>

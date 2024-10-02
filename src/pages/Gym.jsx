@@ -1,7 +1,7 @@
 export default function Gym(){
     return(
         <>
-            Gym
+            Under Construction
         </>
     )
 }

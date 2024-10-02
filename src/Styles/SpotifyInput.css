@@ -1,3 +1,7 @@
-.submitInputButton{
+
+.spotifyControllers{
+    display: flex;
+    justify-content: flex-start;
+    gap: 1rem;
     margin-top: 1rem;
 }

@@ -1,7 +1,7 @@
 export default function BookRecs(){
     return(
         <div>
-            goodreads
+            Under construction
         </div>
     )
 }
